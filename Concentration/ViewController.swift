@@ -9,7 +9,16 @@
 import UIKit
 
 class ViewController: UIViewController {
-    var emojiChoices = ["🎃", "👻", "💀", "☠️", "👠", "🐨", "🧤", "👺", "🤡", "🤓", "👜", "👁", "👀"]
+    var themes = [
+        ["🎃", "👻", "☠️", "💀", "👽", "🤖", "🤡", "👹", "👺", "👾"],
+        ["🐶", "🐱", "🐭", "🐰", "🐹", "🦊", "🐻", "🐼", "🐨", "🐵"],
+        ["🍎", "🍐", "🍌", "🍉", "🍋", "🍇", "🍓", "🥥", "🥝", "🍒"],
+        ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉", "🎱", "🏓"],
+        ["🚗", "🚑", "🚒", "🚅", "🚀", "🚓", "✈️", "⚓️", "🚜", "🛴"],
+        ["⌚️", "📷", "💻", "⌨️", "🖥", "💿", "⏱", "⏰", "⏳", "☎️"]
+    ]
+    
+    var currentTheme: [String]?
     var cardsEmoji = [Int:String]()
     
     lazy var game = Concentration(numberOfCardsPair: 10)
@@ -49,9 +58,13 @@ class ViewController: UIViewController {
     
     
     func emoji(identifier: Int) -> String {
+        if currentTheme == nil {
+            currentTheme = themes[Int.random(in: 0..<themes.count)]
+        }
+        
         if cardsEmoji[identifier] == nil {
-            let emojiIndex = Int.random(in: 0..<emojiChoices.count)
-            cardsEmoji[identifier] = emojiChoices.remove(at: Int(emojiIndex))
+            let emojiIndex = Int.random(in: 0..<currentTheme!.count)
+            cardsEmoji[identifier] = currentTheme!.remove(at: Int(emojiIndex))
         }
         
         return cardsEmoji[identifier] ?? "?"
@@ -59,6 +72,7 @@ class ViewController: UIViewController {
     
     @IBAction func clickStartNewGame(_ sender: UIButton) {
         game = Concentration(numberOfCardsPair: 10)
+        currentTheme = nil
         updateViews()
     }
     
