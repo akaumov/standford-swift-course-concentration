@@ -52,8 +52,7 @@ class ViewController: UIViewController {
             }
         }
         
-        newGameButton.isHidden = !game.isCompleted
-        scoreLabel.text = "Score: \(game.score)"
+        scoreLabel.text = "SCORE: \(game.score)"
     }
     
     

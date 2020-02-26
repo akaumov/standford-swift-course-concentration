@@ -18,6 +18,7 @@ class Concentration {
     var flipCount: Int = 0
     var score: Int = 0
     var isCompleted = false
+    var cardOpenedBeforeIndex: Int?
     
     init(numberOfCardsPair: Int) {
         cards = [Card]()
@@ -30,37 +31,36 @@ class Concentration {
         cards.shuffle()
     }
     
-    func getIndexOfCardOpenedBefore() -> Int? {
-        return cards.firstIndex(where: { item in !item.isMatched && item.isFaceUp })
-    }
-    
     func chooseCard(cardIndex: Int) {
-        defer { cards[cardIndex].isSeen = true }
-        let cardOpenedBeforeIndexOptional = getIndexOfCardOpenedBefore()
+        
         cards[cardIndex].isFaceUp = true
         flipCount += 1
         
-        if cardOpenedBeforeIndexOptional == nil  {
+        if cardOpenedBeforeIndex == nil {
+            cardOpenedBeforeIndex = cardIndex
             return
         }
         
+        let cardOpenedBefore = cards[cardOpenedBeforeIndex!]
         
-        let card = cards[cardIndex]
-        let cardOpenedBeforeIndex = cardOpenedBeforeIndexOptional!
-        let cardOpenedBefore = cards[cardOpenedBeforeIndex]
-        
-        if cardOpenedBefore.identificator == card.identificator {
+        if cardOpenedBefore.identificator == cards[cardIndex].identificator {
             cards[cardIndex].isMatched = true
-            cards[cardOpenedBeforeIndex].isMatched = true
+            cards[cardOpenedBeforeIndex!].isMatched = true
             score += 2
+            cardOpenedBeforeIndex = nil
             return
         }
         
-        if card.isSeen && cardOpenedBefore.isSeen {
-            score -= 2
+        if cards[cardIndex].isSeen {
+            score -= 1
         }
         
-        cards[cardOpenedBeforeIndex].isFaceUp = false
-        cards[cardIndex].isFaceUp = true
+        if cardOpenedBefore.isSeen {
+            score -= 1
+        }
+        
+        cards[cardOpenedBeforeIndex!].isFaceUp = false
+        cards[cardOpenedBeforeIndex!].isSeen = true
+        cardOpenedBeforeIndex = cardIndex
     }
 }
