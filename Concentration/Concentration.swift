@@ -14,6 +14,7 @@ class Concentration {
             isCompleted = cards.allSatisfy({$0.isMatched})
         }
     }
+    var flipCount: Int = 0
     var score: Int = 0
     var isCompleted = false
     
@@ -33,8 +34,9 @@ class Concentration {
     }
     
     func chooseCard(cardIndex: Int) {
-        score += 1
+        flipCount += 1
         
+        let card = cards[cardIndex]
         let cardOpenedBeforeIndexOptional = getIndexOfCardOpenedBefore()
         let isFirstOpenedCard = cardOpenedBeforeIndexOptional == nil
         
@@ -43,7 +45,7 @@ class Concentration {
             return
         }
         
-        let card = cards[cardIndex]
+        
         let cardOpenedBeforeIndex = cardOpenedBeforeIndexOptional!
         let cardOpenedBefore = cards[cardOpenedBeforeIndex]
         
@@ -51,7 +53,16 @@ class Concentration {
             cards[cardIndex].isFaceUp = true
             cards[cardIndex].isMatched = true
             cards[cardOpenedBeforeIndex].isMatched = true
+            score += 1
             return
+        }
+        
+        if card.isSeen {
+            score -= 1
+        }
+        
+        if cardOpenedBefore.isSeen {
+            score -= 1
         }
         
         cards[cardOpenedBeforeIndex].isFaceUp = false
