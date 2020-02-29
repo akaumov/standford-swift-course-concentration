@@ -9,18 +9,21 @@
 import Foundation
 
 class Concentration {
-    var cards: [Card] {
+    private(set) var cards: [Card] {
         didSet {
             isCompleted = cards.allSatisfy({$0.isMatched})
         }
     }
     
-    var flipCount: Int = 0
-    var score: Int = 0
+    private(set) var flipCount: Int = 0
+    private(set) var score: Int = 0
     var isCompleted = false
-    var cardOpenedBeforeIndex: Int?
     
     init(numberOfCardsPair: Int) {
+        guard numberOfCardsPair > 0 else {
+            fatalError("Concentration.init(numberOfCardsPair: \(numberOfCardsPair). You must have at least one pair of cards")
+        }
+        
         cards = [Card]()
         
         for _ in 0..<numberOfCardsPair {
@@ -32,12 +35,19 @@ class Concentration {
     }
     
     func chooseCard(cardIndex: Int) {
+        guard cards.indices.contains(cardIndex) else {
+            fatalError("Concentration.chooseCard(at: \(cardIndex). Chosen index not in the cards")
+        }
+        defer { cards[cardIndex].isFaceUp = true }
         
-        cards[cardIndex].isFaceUp = true
+        let cardOpenedBeforeIndex = cards.firstIndex(where: { card in card.isFaceUp && !card.isMatched})
+        if cardOpenedBeforeIndex == cardIndex {
+            return
+        }
+        
         flipCount += 1
         
         if cardOpenedBeforeIndex == nil {
-            cardOpenedBeforeIndex = cardIndex
             return
         }
         
@@ -47,7 +57,6 @@ class Concentration {
             cards[cardIndex].isMatched = true
             cards[cardOpenedBeforeIndex!].isMatched = true
             score += 2
-            cardOpenedBeforeIndex = nil
             return
         }
         
@@ -61,6 +70,5 @@ class Concentration {
         
         cards[cardOpenedBeforeIndex!].isFaceUp = false
         cards[cardOpenedBeforeIndex!].isSeen = true
-        cardOpenedBeforeIndex = cardIndex
     }
 }

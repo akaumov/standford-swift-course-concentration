@@ -9,7 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-    var themes = [
+    private var themes = [
         ["🎃", "👻", "☠️", "💀", "👽", "🤖", "🤡", "👹", "👺", "👾"],
         ["🐶", "🐱", "🐭", "🐰", "🐹", "🦊", "🐻", "🐼", "🐨", "🐵"],
         ["🍎", "🍐", "🍌", "🍉", "🍋", "🍇", "🍓", "🥥", "🥝", "🍒"],
@@ -18,25 +18,30 @@ class ViewController: UIViewController {
         ["⌚️", "📷", "💻", "⌨️", "🖥", "💿", "⏱", "⏰", "⏳", "☎️"]
     ]
     
-    var currentTheme: [String]?
-    var cardsEmoji = [Int:String]()
+    private var currentTheme: [String]?
+    private var cardsEmoji = [Int:String]()
+    private var numberOfPairsOfCards: Int {
+        get {
+            buttons.count/2
+        }
+    }
     
-    lazy var game = Concentration(numberOfCardsPair: 10)
+    private lazy var game = Concentration(numberOfCardsPair: numberOfPairsOfCards)
 
-    @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet private weak var scoreLabel: UILabel!
 
-    @IBOutlet var buttons: [UIButton]!
+    @IBOutlet private var buttons: [UIButton]!
     
-    @IBOutlet weak var newGameButton: UIButton!
+    @IBOutlet private weak var newGameButton: UIButton!
     
-    @IBAction func clickButton(_ sender: UIButton, forEvent event: UIEvent) {
+    @IBAction private func clickButton(_ sender: UIButton, forEvent event: UIEvent) {
         if let cardIndex = buttons.firstIndex(of: sender) {
             game.chooseCard(cardIndex: cardIndex)
             updateViews()
         }
     }
 
-    func updateViews() {
+    private func updateViews() {
         for (index, card) in game.cards.enumerated() {
             var button = buttons[index]
             
@@ -56,7 +61,7 @@ class ViewController: UIViewController {
     }
     
     
-    func emoji(identifier: Int) -> String {
+    private func emoji(identifier: Int) -> String {
         if currentTheme == nil {
             currentTheme = themes[Int.random(in: 0..<themes.count)]
         }
@@ -69,14 +74,10 @@ class ViewController: UIViewController {
         return cardsEmoji[identifier] ?? "?"
     }
     
-    @IBAction func clickStartNewGame(_ sender: UIButton) {
+    @IBAction private func clickStartNewGame(_ sender: UIButton) {
         game = Concentration(numberOfCardsPair: 10)
         currentTheme = nil
         updateViews()
-    }
-    
-    override func viewDidLoad() {
-
     }
 }
 

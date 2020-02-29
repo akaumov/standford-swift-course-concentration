@@ -14,9 +14,9 @@ struct Card {
     var isMatched = false
     var isSeen = false
     
-    static var lastGeneratedIdentificator = 0
+    private static var lastGeneratedIdentificator = 0
     
-    static func getNewIdentificator() -> Int {
+    private static func getNewIdentificator() -> Int {
         lastGeneratedIdentificator += 1
         return lastGeneratedIdentificator
     }
