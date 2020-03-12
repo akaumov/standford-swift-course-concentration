@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     ]
     
     private var currentTheme: [String]?
-    private var cardsEmoji = [Int:String]()
+    private var cardsEmoji = [Card:String]()
     private var numberOfPairsOfCards: Int {
         get {
             buttons.count/2
@@ -46,11 +46,11 @@ class ViewController: UIViewController {
             var button = buttons[index]
             
             if card.isMatched {
-                button.setTitle(emoji(identifier: card.identificator), for: UIControl.State.normal)
+                button.setTitle(emoji(of: card), for: UIControl.State.normal)
                 button.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.1004120291)
             } else if card.isFaceUp {
                 button.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-                button.setTitle(emoji(identifier: card.identificator), for: UIControl.State.normal)
+                button.setTitle(emoji(of: card), for: UIControl.State.normal)
             } else {
                 button.backgroundColor = #colorLiteral(red: 1, green: 0.5145950317, blue: 0, alpha: 1)
                 button.setTitle( "", for: UIControl.State.normal)
@@ -61,17 +61,17 @@ class ViewController: UIViewController {
     }
     
     
-    private func emoji(identifier: Int) -> String {
+    private func emoji(of card: Card) -> String {
         if currentTheme == nil {
             currentTheme = themes[Int.random(in: 0..<themes.count)]
         }
         
-        if cardsEmoji[identifier] == nil {
+        if cardsEmoji[card] == nil {
             let emojiIndex = Int.random(in: 0..<currentTheme!.count)
-            cardsEmoji[identifier] = currentTheme!.remove(at: Int(emojiIndex))
+            cardsEmoji[card] = currentTheme!.remove(at: Int(emojiIndex))
         }
         
-        return cardsEmoji[identifier] ?? "?"
+        return cardsEmoji[card] ?? "?"
     }
     
     @IBAction private func clickStartNewGame(_ sender: UIButton) {

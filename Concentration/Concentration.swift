@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Concentration {
+struct Concentration {
     private(set) var cards: [Card] {
         didSet {
             isCompleted = cards.allSatisfy({$0.isMatched})
@@ -34,7 +34,7 @@ class Concentration {
         cards.shuffle()
     }
     
-    func chooseCard(cardIndex: Int) {
+    mutating func chooseCard(cardIndex: Int) {
         guard cards.indices.contains(cardIndex) else {
             fatalError("Concentration.chooseCard(at: \(cardIndex). Chosen index not in the cards")
         }
@@ -53,7 +53,7 @@ class Concentration {
         
         let cardOpenedBefore = cards[cardOpenedBeforeIndex!]
         
-        if cardOpenedBefore.identificator == cards[cardIndex].identificator {
+        if cardOpenedBefore == cards[cardIndex] {
             cards[cardIndex].isMatched = true
             cards[cardOpenedBeforeIndex!].isMatched = true
             score += 2
