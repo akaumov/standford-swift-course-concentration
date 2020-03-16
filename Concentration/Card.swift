@@ -9,7 +9,7 @@
 import Foundation
 
 struct Card: Hashable {
-    var identificator: Int
+    private var identificator: Int
     var isFaceUp = false
     var isMatched = false
     var isSeen = false

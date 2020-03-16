@@ -10,15 +10,15 @@ import UIKit
 
 class ViewController: UIViewController {
     private var themes = [
-        ["🎃", "👻", "☠️", "💀", "👽", "🤖", "🤡", "👹", "👺", "👾"],
-        ["🐶", "🐱", "🐭", "🐰", "🐹", "🦊", "🐻", "🐼", "🐨", "🐵"],
-        ["🍎", "🍐", "🍌", "🍉", "🍋", "🍇", "🍓", "🥥", "🥝", "🍒"],
-        ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉", "🎱", "🏓"],
-        ["🚗", "🚑", "🚒", "🚅", "🚀", "🚓", "✈️", "⚓️", "🚜", "🛴"],
-        ["⌚️", "📷", "💻", "⌨️", "🖥", "💿", "⏱", "⏰", "⏳", "☎️"]
+        "🎃👻☠️💀👽🤖🤡👹👺👾",
+        "🐶🐱🐭🐰🐹🦊🐻🐼🐨🐵",
+        "🍎🍐🍌🍉🍋🍇🍓🥥🥝🍒",
+        "⚽️🏀🏈⚾️🥎🎾🏐🏉🎱🏓",
+        "🚗🚑🚒🚅🚀🚓✈️⚓️🚜🛴",
+        "⌚️📷💻⌨️🖥💿⏱⏰⏳☎️"
     ]
     
-    private var currentTheme: [String]?
+    private var currentTheme: String?
     private var cardsEmoji = [Card:String]()
     private var numberOfPairsOfCards: Int {
         get {
@@ -67,8 +67,9 @@ class ViewController: UIViewController {
         }
         
         if cardsEmoji[card] == nil {
-            let emojiIndex = Int.random(in: 0..<currentTheme!.count)
-            cardsEmoji[card] = currentTheme!.remove(at: Int(emojiIndex))
+            let randomIndex = Int.random(in: 0..<currentTheme!.count)
+            let emojiIndex = currentTheme!.index(currentTheme!.startIndex, offsetBy: randomIndex)
+            cardsEmoji[card] = String(currentTheme!.remove(at: emojiIndex))
         }
         
         return cardsEmoji[card] ?? "?"
