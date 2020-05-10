@@ -8,6 +8,10 @@
 
 import Foundation
 
+protocol MyDummyProtocol: AnyObject {
+    
+}
+
 struct Concentration {
     private(set) var cards: [Card] {
         didSet {

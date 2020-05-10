@@ -28,7 +28,11 @@ class ViewController: UIViewController {
     
     private lazy var game = Concentration(numberOfCardsPair: numberOfPairsOfCards)
 
-    @IBOutlet private weak var scoreLabel: UILabel!
+    @IBOutlet private weak var scoreLabel: UILabel! {
+        didSet {
+            updateScoreLabel()
+        }
+    }
 
     @IBOutlet private var buttons: [UIButton]!
     
@@ -40,10 +44,23 @@ class ViewController: UIViewController {
             updateViews()
         }
     }
+    
+    private func updateScoreLabel() {
+        let attributes: [NSAttributedString.Key: Any] = [
+            .strokeColor: #colorLiteral(red: 1, green: 0.5145950317, blue: 0, alpha: 1),
+            .strokeWidth: 5
+        ]
+        
+        
+        scoreLabel.attributedText = NSAttributedString(
+            string: "SCORE: \(game.score)",
+            attributes: attributes
+        )
+    }
 
     private func updateViews() {
         for (index, card) in game.cards.enumerated() {
-            var button = buttons[index]
+            let button = buttons[index]
             
             if card.isMatched {
                 button.setTitle(emoji(of: card), for: UIControl.State.normal)
@@ -57,7 +74,7 @@ class ViewController: UIViewController {
             }
         }
         
-        scoreLabel.text = "SCORE: \(game.score)"
+        updateScoreLabel()
     }
     
     
